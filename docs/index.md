@@ -26,13 +26,13 @@ title: Vue d'ensemble du projet
 ### Contexte
 
 <!-- > Présentez le contexte général dans lequel s’inscrit votre projet (social, organisationnel, technologique, éducatif, environnemental, etc.).--> 
-Le projet se situe dans un contexte dynamique, organisationnel et technologique. Il existe un grand nombre de propriétaires de petits immeubles qui doivent gérer leurs logements ainsi que leurs obligations professionnelles et personnelles. Cette gestion repose souvent sur des méthodes informelles ou non optimales. Donc, on cherche à optimiser la communication et l'organisation entre les deux parties tout en améliorant l'utilisation des technologies disponibles.
+Le projet se situe dans un contexte dynamique, organisationnel et technologique. Il existe un grand nombre de propriétaires de petits immeubles qui doivent gérer leurs logements ainsi que leurs obligations professionnelles et personnelles, souvent en interaction directe avec leurs locataires. Selon Statistique Canada, le taux de propriété à Montréal s'élevait à 36.4% en 2021, ce qui représente une proportion non négligeable de la population. Cette réalité met en évidence l'importance de la gestion immobilière à petite échelle, laquelle repose souvent sur des méthodes informelles ou non optimales.
 
 ### Problématique
 <!--
 > Décrivez le problème central ou la question de recherche que votre projet cherche à adresser, pourquoi s'y intéresser et les faiblesses des solutions actuelles. 
 > Le problème doit pouvoir être compris indépendamment de la solution envisagée. -->
-Le problème central que le projet cherche à adresser concerne la communication entre les propriétaires et les locataires. Cette communication est souvent source de malentendus, de retards ou de conflits involontaires lors de requêtes, de suivis ou de transmission d'informations primordiales. On s'y intéresse car ces sources peuvent nuire à la relation entre les deux parties et compliquer la gestion des logements. Les faiblesses des solutions actuelles sont le manque de formalité, l'utilisation de moyens informels ou des logiciels trop lourds et mal adaptés aux besoins des petits immeubles. De plus, l'utilisation d'intermédiaires peut également entraîner des délais.
+Le problème central que le projet cherche à adresser concerne la communication entre les propriétaires et les locataires. Cette communication est souvent source de malentendus, de retards ou de conflits involontaires lors de requêtes, de suivis ou de transmission d'informations primordiales. Ces situations peuvent nuire à la relation entre les deux parties et compliquer la gestion des logements. Les faiblesses des solutions actuelles sont le manque de formalité, l'utilisation de moyens informels ou des logiciels trop lourds et mal adaptés aux besoins des petits immeubles. Par exemple, Hemlane, une application américaine, se concentre principalement sur la gestion des baux et les aspects financier, ce qui peut alourdir son utilisation pour les petits propriétaires. De même, Rentila est davantage orientée vers le suivi des loyers, la comptabilité et l'aide à la déclaration des revenus fonciers. De plus, l'utilisation d'intermédiaires, comme Gestion LTL, peut également entraîner des délais et des coûts additionnels.
 
 ### Proposition et objectifs
 <!--
@@ -45,19 +45,21 @@ Les objectifs principaux du projet sont :
 - Mettre en place un système de communication entre propriétaires et locataires sur une plateforme unique.
 - Organiser les demandes et les informations afin d'éviter les oublis et les malentendus.
 - Assurer un suivi clair des échanges et des requêtes effectuées.
-- Concevoir une application fonctionnelle dans les délais données tout en respectant les contraintes techniques et en intégrant des fonctionnalités propres aux applications mobiles (par exemple l'utilisation de la caméra ou la gestion du cycle de vie des pages).
+- Respecter les contraintes imposées par le cours.
 ### Méthodologie
 <!--
 > Expliquez comment vous comptez aborder le projet : démarche générale, grandes étapes prévues, itérations, types de validations envisagées. -->
 Le projet sera réalisé à l'aide d'une démarche itérative et incrémentale, avec l'accompagnement d'un superviseur assurant le suivi du projet par des rencontres régulières tout au long de la progression. Ces rencontres permettront de valider les choix techniques et stratégiques afin d'assurer la réussite du projet.
 
-Durant les premières semaines, le projet portera sur l'idéation, la planification et les études préliminaires, incluant l'analyse des besoins et des stratégies afin d'assurer une bonne organisation du travail.
+Durant les deux premières semaines, le projet portera sur l'idéation, la planification et les études préliminaires, incluant l'analyse des besoins et l'étude des stratégies afin d'assurer une bonne organisation du travail. Cette phase permettra également de définir et de structurer les fonctionnalités essentielles de l'application en fonction des besoins de chaque partie.
 
-Par la suite, le développement de l'application se fera de manière progressive, sous supervision, permettant d'obtenir des suivis et des retours afin d'ajuster la conception et les prototypes au fil des itérations.
+Par la suite, le développement de l'application se fera de manière progressive, sous supervision, permettant d'obtenir des suivis réguliers et des retours afin d'ajuster la conception. Une phase de prototypage sera d'abord réalisée afin de visualiser les fonctionnalités et les interactions principales de l'application lors de sa navigation. Cette phase permettra par la suite d'affiner l'interface et les fonctionnalités avant d'effectuer l'implémentation. Le tout sera ajusté au fil des itérations en fonction des retours obtenus.
 
 Au cours de la session, deux présentations de l'état d'avancement seront effectuées devant les autres équipes afin d'obtenir des retours sur le travail réalisé et de partager des idées.
 
-Dans les deux dernières semaines, une présentation final et la remise d'un rapport est fait pour présenter concrétement le projet.
+Une semaine sera réservée à l'évaluation de l'application développée afin de valider son fonctionnement et la cohérence des interactions.
+
+Dans les deux dernières semaines, une présentation finale et la remise d'un rapport seront effectuées pour présenter concrètement le projet.
 ### Validation et Évaluation
 <!--
 > Indiquez comment vous évaluerez que votre solution répond aux objectifs du projet (ex. scénarios d’usage, tests, retours utilisateurs, indicateurs qualitatifs ou quantitatifs). -->
@@ -79,5 +81,5 @@ Luis Andres Eche Guzman: Responsable du projet
 | Activités                      | Début   |   Fin   | Livrable                            | Statut      |
 |--------------------------------|---------|---------|-------------------------------------|-------------|
 | Ouverture de projet            | 13 jan. | 13 jan. | Proposition de projet               | ✅ Terminé  |
-| Études préliminaires           | 13 jan. | 23 jan. | Document d'analyse                  | 🔄 En cours |
+| Études préliminaires           | 13 jan. | 25 jan. | Document d'analyse                  | 🔄 En cours |
 | Présentation + Rapport         | 17 avr. | 30 avr. | Présentation + Rapport              | ⏳ À venir  |
