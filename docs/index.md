@@ -13,7 +13,7 @@ title: Vue d'ensemble du projet
 # Vue d'ensemble du projet
 
 !!! info "Informations générales"
-    **Titre**: `[Nom_du_projet]`    
+    **Titre**: Système de gestion de petits immeubles   
     **Session**: Hiver 2026  
     **Auteur(s)**: Luis Andres Eche Guzman (20218958)   
     **Thème(s)**: Développement mobile, génie logiciel  
