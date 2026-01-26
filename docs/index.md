@@ -13,6 +13,7 @@ title: Vue d'ensemble du projet
 # Vue d'ensemble du projet
 
 !!! info "Informations générales"
+    **Titre**: `[Nom_du_projet]`    
     **Session**: Hiver 2026  
     **Auteur(s)**: Luis Andres Eche Guzman    
     **Thème(s)**: Développement mobile, génie logiciel  
@@ -26,13 +27,13 @@ title: Vue d'ensemble du projet
 ### Contexte
 
 <!-- > Présentez le contexte général dans lequel s’inscrit votre projet (social, organisationnel, technologique, éducatif, environnemental, etc.).--> 
-Le projet se situe dans un contexte dynamique, organisationnel et technologique. Il existe un grand nombre de propriétaires de petits immeubles qui doivent gérer leurs logements ainsi que leurs obligations professionnelles et personnelles, souvent en interaction directe avec leurs locataires. Selon Statistique Canada, le taux de propriété à Montréal s'élevait à 36.4% en 2021, ce qui représente une proportion non négligeable de la population. Cette réalité met en évidence l'importance de la gestion immobilière à petite échelle, laquelle repose souvent sur des méthodes informelles ou non optimales.
+Le projet se situe dans un contexte dynamique, organisationnel et technologique. Il existe un grand nombre de propriétaires de petits immeubles qui doivent gérer leurs logements ainsi que leurs obligations professionnelles et personnelles, souvent en interaction directe avec leurs locataires. Selon Statistique Canada, le taux de propriété à Montréal s'élevait à 36.4% en 2021 ([Statistique Canada, 2021](rapport/references.md#stat-canada)), ce qui représente une proportion non négligeable de la population. Cette réalité met en évidence l'importance de la gestion immobilière à petite échelle, laquelle repose souvent sur des méthodes informelles ou non optimales.
 
 ### Problématique
 <!--
 > Décrivez le problème central ou la question de recherche que votre projet cherche à adresser, pourquoi s'y intéresser et les faiblesses des solutions actuelles. 
 > Le problème doit pouvoir être compris indépendamment de la solution envisagée. -->
-Le problème central que le projet cherche à adresser concerne la communication entre les propriétaires et les locataires. Cette communication est souvent source de malentendus, de retards ou de conflits involontaires lors de requêtes, de suivis ou de transmission d'informations primordiales. Ces situations peuvent nuire à la relation entre les deux parties et compliquer la gestion des logements. Les faiblesses des solutions actuelles sont le manque de formalité, l'utilisation de moyens informels ou des logiciels trop lourds et mal adaptés aux besoins des petits immeubles. Par exemple, Hemlane, une application américaine, se concentre principalement sur la gestion des baux et les aspects financier, ce qui peut alourdir son utilisation pour les petits propriétaires. De même, Rentila est davantage orientée vers le suivi des loyers, la comptabilité et l'aide à la déclaration des revenus fonciers. De plus, l'utilisation d'intermédiaires, comme Gestion LTL, peut également entraîner des délais et des coûts additionnels.
+Le problème central que le projet cherche à adresser concerne la communication entre les propriétaires et les locataires. Cette communication est souvent source de malentendus, de retards ou de conflits involontaires lors de requêtes, de suivis ou de transmission d'informations primordiales. Ces situations peuvent nuire à la relation entre les deux parties et compliquer la gestion des logements. Les faiblesses des solutions actuelles sont le manque de formalité, l'utilisation de moyens informels ou des logiciels trop lourds et mal adaptés aux besoins des petits immeubles. Par exemple, [Hemlane](rapport/references.md#hemlane), une application américaine, se concentre principalement sur la gestion des baux et les aspects financier, ce qui peut alourdir son utilisation pour les petits propriétaires. De même, [Rentila](rapport/references.md#rentila) est davantage orientée vers le suivi des loyers, la comptabilité et l'aide à la déclaration des revenus fonciers. De plus, l'utilisation d'intermédiaires, comme [Gestion LTL](rapport/references.md#gestion-ltl), peut également entraîner des délais et des coûts additionnels.
 
 ### Proposition et objectifs
 <!--
