@@ -14,7 +14,7 @@ title: Vue d'ensemble du projet
 
 !!! info "Informations générales"
     **Session**: Hiver 2026  
-    **Auteur(s)**: Luis Andres Eche Guzman    
+    **Auteur(s)**: Luis Andres Eche Guzman (20218958)   
     **Thème(s)**: Développement mobile, génie logiciel  
     **Superviseur(s)**: Louis Edouard Lafontant   
     **Collaborateur(s):** <!-- Nom de(s) collaborateur(s) et partenaire(s)` -->  
