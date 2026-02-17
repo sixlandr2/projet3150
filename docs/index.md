@@ -18,7 +18,7 @@ title: Vue d'ensemble du projet
     **Auteur(s)**: Luis Andres Eche Guzman (20218958)   
     **Thème(s)**: Développement mobile, génie logiciel  
     **Superviseur(s)**: Louis Edouard Lafontant   
-    **Collaborateur(s):** <!-- Nom de(s) collaborateur(s) et partenaire(s)` -->  
+    **Collaborateur(s):** Les Immeubles Eche Guzman Et Fils Inc.
 
 ## Description du projet
 <!--
@@ -82,5 +82,6 @@ Luis Andres Eche Guzman: Responsable du projet
 | Activités                      | Début   |   Fin   | Livrable                            | Statut      |
 |--------------------------------|---------|---------|-------------------------------------|-------------|
 | Ouverture de projet            | 13 jan. | 13 jan. | Proposition de projet               | ✅ Terminé  |
-| Études préliminaires           | 13 jan. | 25 jan. | Document d'analyse                  | 🔄 En cours |
+| Études préliminaires           | 13 jan. | 25 jan. | Document d'analyse                  | ✅ Terminé |
+| Conception et prototypage           | 25 jan. | 20 fev. | Présentation mise en commun                  | 🔄 En cours |
 | Présentation + Rapport         | 17 avr. | 30 avr. | Présentation + Rapport              | ⏳ À venir  |
