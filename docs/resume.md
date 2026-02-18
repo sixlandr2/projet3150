@@ -11,14 +11,18 @@ title: Résumé du projet
 </style>
 
 # Résumé du projet
-
+<!--
 > :bulb: Cette page présente une **synthèse courte** du projet.
 > Elle doit pouvoir être comprise sans lire le rapport complet.  
-> N'oubliez pas d’effacer ou de mettre en commentaires les notes (`>`) avant la remise finale.
+> N'oubliez pas d’effacer ou de mettre en commentaires les notes (`>`) avant la remise finale. -->
 
 ## Introduction
+<!--
+> Présentez en un court texte cohérent : le contexte général, la problématique ou question centrale, la proposition retenue. -->
 
-> Présentez en un court texte cohérent : le contexte général, la problématique ou question centrale, la proposition retenue.
+Le projet s'inscrit dans un contexte organisationnel et technologique de la gestion immobilière à petite échelle. La compléxité des horaires et des obligations, tant des propriétaires que des locataires, entraîne fréquemment des problèmes de communication, pouvant engendrer des malentendus, des retards ou des tensions. L'utilisation de moyens informels ou de logiciels trop lourds n'encourage ni une gestion structurée ni une communication efficace entre les parties.
+
+Afin de répondre à cette problématique, le projet propose de concevoir et de développer une application mobile qui intègre les fonctionnalités essentielles à une communication claire, centralisée et fiable, adaptée aux besoins de tous.
 
 ## Méthodologie et analyse
 
@@ -26,6 +30,8 @@ title: Résumé du projet
 > grandes étapes, itérations, validations majeures.
 >
 > Ne détaillez pas le suivi ni la planification fine.
+
+Le projet sera réalisé à l'aide d'une démarche itérative et incrémentale.
 
 ## Architecture et conception
 
