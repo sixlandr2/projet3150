@@ -19,32 +19,38 @@ return (
         headerShadowVisible: false,
       }} />
 
-       <View style={styles.container}>
-        <TouchableOpacity style={styles.btn} onPress={handleLogout}>
+      <View style={styles.container}>
+        <View style={styles.profil}>
+            <View style={styles.avatar}>
+                <Text style={styles.avatarText}>L</Text>
+            </View>
+            <Text style={styles.username}>Luis A Eche Guzman</Text>
+            <Text style={styles.email}>luis@email.com</Text>
+        </View>
+
+        <TouchableOpacity style={styles.btn}>
             <Text style={styles.btnText}>Profil</Text>
         </TouchableOpacity>
  
 
       
-        <TouchableOpacity style={styles.btn} onPress={handleLogout}>
+        <TouchableOpacity style={styles.btn}>
             <Text style={styles.btnText}>Adresses</Text>
         </TouchableOpacity>
      
-
+        <View style={styles.separateur}/>
      
-        <TouchableOpacity style={styles.btn} onPress={handleLogout}>
+        <TouchableOpacity style={[styles.btn, { marginTop: 'auto'}]}>
             <Text style={styles.btnText}>Changer mot de passe</Text>
         </TouchableOpacity>
      
 
 
-      
         <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
             <Text style={styles.logoutText}>Se déconnecter</Text>
         </TouchableOpacity>
+
       </View>
-
-
     </>
   );
 };
@@ -53,7 +59,7 @@ return (
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 24,
         paddingTop: 24,
@@ -83,5 +89,35 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    profil: {
+        alignItems: 'center',
+        paddingVertical: 32,
+        gap: 8,
+    },
+    avatar: {
+        width: 72,
+        height: 72,
+        borderRadius: 36,
+        backgroundColor: '#7C83F5',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    avatarText: {
+        color: '#fff',
+        fontSize: 28,
+        fontWeight: '700',
+    },
+    username: {
+        fontSize: 20,
+        fontWeight: '700',
+        color: '#1e1e2e',
+    },
+    email: {
+        fontSize: 14,
+        color: '#8A8A9A',
+    },
+    separateur: {
+        height: 48,
     },
 });
