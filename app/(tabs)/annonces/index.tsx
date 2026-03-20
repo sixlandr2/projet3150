@@ -14,7 +14,7 @@ export default function Annonces() {
         title: "Annonces",
         headerLeft: () => null,
         headerBackVisible:false,
-        headerStyle: { backgroundColor: '#f0f4ff'},
+        headerStyle: { backgroundColor: '#7C83F5'},
         headerTitleStyle: {fontWeight: 'bold', color: '#1e1e2e'},
         headerShadowVisible: false,
       }} />
