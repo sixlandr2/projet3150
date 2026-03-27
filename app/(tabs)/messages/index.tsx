@@ -16,10 +16,10 @@ const posts = [
 export default function Messages() {
 
   const [search, setSearch] = useState('');
-  const [filtre, setFiltre] = useState<'Tous' | 'Ouvert' | 'Fermé'>('Tous');
+  const [filtre, setFiltre] = useState<'Ouvert' | 'Fermé'>('Ouvert');
 
   const postsFiltres = posts.filter(p => {
-    const matchStatut = filtre === 'Tous' || p.statut === filtre;
+    const matchStatut = p.statut === filtre;
     const matchSearch = p.titre.toLowerCase().includes(search.toLowerCase()) || p.adresse.toLowerCase().includes(search.toLowerCase());
     return matchStatut && matchSearch;
   });
@@ -38,14 +38,15 @@ export default function Messages() {
 
       <View style={styles.searchRow}>
         <TouchableOpacity
-          style={[styles.filtreBtn, filtre !== 'Tous' && styles.filtreBtnActive]}
-          onPress={() => setFiltre(filtre === 'Tous' ? 'Ouvert' : filtre === 'Ouvert' ? 'Fermé' : 'Tous')}
+          style={styles.filtreBtn}
+          onPress={() => setFiltre(filtre === 'Ouvert' ? 'Fermé' : 'Ouvert')}
         >
-          <Text style={[styles.filtreBtnText, filtre !== 'Tous' && styles.filtreBtnTextActive]}>
-            {filtre === 'Tous' ? 'Filtrer' : filtre}
+          <Text style={styles.filtreBtnText}>
+            {filtre}
           </Text>
         </TouchableOpacity>
-        <View>
+
+        <View style={styles.searchBox}>
           <MaterialCommunityIcons name="magnify" size={20} color={"#8A8A9A"} />
           <TextInput
             style={styles.searchInput}
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   cardTemps: {
-    color: 'rgba(255,255,255,0.7)',
+    color: '#000000',
     fontSize: 12,
     textAlign: 'right',
   },

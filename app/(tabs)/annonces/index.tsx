@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Stack } from "expo-router";
+import { Stack, router } from "expo-router";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const annonces = [
@@ -31,7 +31,7 @@ export default function Annonces() {
         ))}
       </ScrollView>
 
-      <TouchableOpacity style={styles.fab}>
+      <TouchableOpacity style={styles.fab} onPress={() => router.push('/(tabs)/annonces/nouveau')}>
         <MaterialCommunityIcons name='plus' size={30} color={'#fff'}/>
       </TouchableOpacity>
 

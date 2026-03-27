@@ -25,7 +25,7 @@ return (
                 <Text style={styles.avatarText}>L</Text>
             </View>
             <Text style={styles.username}>Luis A Eche Guzman</Text>
-            <Text style={styles.email}>luis@email.com</Text>
+            {/*<Text style={styles.email}>luis@email.com</Text>*/}
         </View>
 
         <TouchableOpacity style={styles.btn}>
