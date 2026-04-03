@@ -1,9 +1,12 @@
+import { useAuth } from "@/context/AuthContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Stack, router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const API = 'http://10.0.0.136:3000';
+const {user} = useAuth();
+const estProprietaire = user?.role === 'proprietaire';
 
 type Annonce = {
   id: number;
@@ -68,10 +71,12 @@ export default function Annonces() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
-      <TouchableOpacity style={styles.fab} onPress={() => router.push('/(tabs)/annonces/nouveau')}>
+      {estProprietaire && (
+        <TouchableOpacity style={styles.fab} onPress={() => router.push('/(tabs)/annonces/nouveau')}>
         <MaterialCommunityIcons name='plus' size={30} color={'#fff'}/>
       </TouchableOpacity>
+      )}
+      
 
     </>
   );

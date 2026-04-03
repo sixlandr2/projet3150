@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import express from "express";
 import annoncesRoutes from './routes/annonces.routes.js';
 import authRoutes from "./routes/auth.routes.js";
+import invitationsRoutes from './routes/invitations.routes.js';
 config();
 
 const app = express();
@@ -12,6 +13,8 @@ app.use(express.json());
 app.use('/api/annonces', annoncesRoutes);
 
 app.use("/api/auth", authRoutes);
+
+app.use('/api/invitations', invitationsRoutes);
 
 app.listen(3000, () => {
     console.log("Serveur running on port 3000");

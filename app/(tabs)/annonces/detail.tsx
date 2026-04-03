@@ -1,7 +1,10 @@
+import { useAuth } from "@/context/AuthContext";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const API = 'http://10.0.0.136:3000';
+const {user} = useAuth();
+const estProprietaire = user?.role==='proprietaire';
 
 export default function DetailAnnonce() {
     const { id, titre, contenu, date_publication, date_expiration, batiment_id } = useLocalSearchParams<{
@@ -86,7 +89,8 @@ export default function DetailAnnonce() {
                 )}
 
                 <View style={styles.btns}>
-                    <TouchableOpacity 
+                    {estProprietaire &&(
+                        <TouchableOpacity 
                         style={styles.modifierBtn}
                         onPress={() => router.push({
                             pathname: '/(tabs)/annonces/modifier' as any,
@@ -102,10 +106,12 @@ export default function DetailAnnonce() {
                         >
                         <Text style={styles.modifierBtnText}>Modifier</Text>
                     </TouchableOpacity>
-
+                    )}
+                    {estProprietaire &&(
                     <TouchableOpacity style={styles.supprimerBtn} onPress={supprimer}>
                         <Text style={styles.supprimerBtnText}>Supprimer</Text>
                     </TouchableOpacity>
+                    )}
                 </View>
             </ScrollView>
         </>

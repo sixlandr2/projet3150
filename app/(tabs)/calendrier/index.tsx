@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
 import { useRef, useState } from "react";
@@ -13,6 +14,8 @@ const events = [
     end: new Date(2026, 1, 9, 16, 0),
   },
 ];
+const {user} = useAuth();
+const estProprietaire = user?.role === 'proprietaire';
 
 export default function Calendrier() {
   const [mode, setMode] = useState<'week' | '3days'>('week');
@@ -154,10 +157,12 @@ export default function Calendrier() {
 
         </TouchableOpacity>
       </Modal>
-
+      
+      {estProprietaire &&(
       <TouchableOpacity style={styles.fab}>
         <MaterialCommunityIcons name='plus' size={30} color={'#fff'}/>
       </TouchableOpacity>
+      )}
     </GestureHandlerRootView>
     </>
   );
