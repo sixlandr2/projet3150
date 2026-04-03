@@ -1,11 +1,14 @@
+import { useAuth } from '@/context/AuthContext';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from "expo-router";
 import { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function Login() {
+    const {login} = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [erreur, setErreur] = useState('');
     const [loading, setLoading] = useState(false);
 
     const [showPassword, setShowPassword] = useState(false);
@@ -15,7 +18,18 @@ export default function Login() {
     };
 
     const handleLogin = async() => {
-        Alert.alert('Test', 'Bouton fonctionne');
+        if (!email || !password) {
+            setErreur('Veuillez entrer votre courriel et mot de passe');
+            return;
+        }
+        setLoading(true);
+        const result = await login(email, password);
+        setLoading(false);
+        if (result.error) {
+            setErreur(result.error);
+            return;
+        }
+        router.replace('/(tabs)/home');
     };
 
 
@@ -25,47 +39,48 @@ export default function Login() {
     <View style={styles.container}>
         <Text style={styles.title}>Connexion</Text>
 
+        <Text style={styles.label}>Courriel</Text>
         <TextInput
             style={styles.input}
-            placeholder="Courriel"
-            placeholderTextColor='#aaa'
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
+            placeholder='votre@courriel.com'
+            placeholderTextColor='#8A8A9A'
         />
 
-
-        <View style={styles.passwordContainer}>
+        <Text style={styles.label}>Mot de passe</Text>
+        <View style={styles.passwordRow}>
             <TextInput
             secureTextEntry={!showPassword}
             style={styles.passwordInput}
-            placeholder="Mot de passe"
-            placeholderTextColor='#aaa'
+            autoCapitalize='none'
             value={password}
             onChangeText={setPassword}
-        />
-        <MaterialCommunityIcons
-            name={showPassword ? 'eye-off' : 'eye'}
-            size={24}
-            color={"#aaa"}
-            onPress={toggleShowPassword}
-        />
+            />
+            <TouchableOpacity onPress={()=> setShowPassword(!showPassword)}>
+                <MaterialCommunityIcons
+                    name={showPassword ? 'eye-off' : 'eye'}
+                    size={22}
+                    color={"#8A8A9A"}
+                />
+            </TouchableOpacity>
         </View>
         
-        
+        {erreur ? <Text style={styles.erreur}>{erreur}</Text> : null}
 
 
         
 
-        <TouchableOpacity style={styles.btn} onPress={() => router.push("/(tabs)/home")}>
+        <TouchableOpacity style={styles.btn} onPress={handleLogin} disabled={loading}>
             <Text style={styles.btnText}>
-                {loading ? 'Chargement...' : 'Se connecter'}
+                {loading ? 'Connexion...' : 'Se connecter'}
             </Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => router.push('/(auth)/signup')}>
-            <Text style={styles.link}>Pas de compte? S'inscrire</Text>
+            <Text style={styles.inscriptionText}>Pas de compte? S'inscrire</Text>
         </TouchableOpacity>
 
 
@@ -94,6 +109,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#e5e7eb',
         marginBottom: 16,
+    },
+    passwordRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#e5e7eb',
+        marginBottom: 16,
+        paddingHorizontal: 12,
     },
     title: {
         fontSize: 28,
@@ -129,12 +154,23 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
     },
-    link: {
+    inscriptionText: {
         color: '#6366f1',
         fontSize: 14,
         marginTop: 8,
     },
     icon: {
         marginLeft: 10,
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: '600',
+        color:'#1e1e2e',
+        marginBottom: 4,
+    },
+    erreur: {
+        color: '#ef4444',
+        fontSize: 14,
+        marginBottom: 12,
     }
 });

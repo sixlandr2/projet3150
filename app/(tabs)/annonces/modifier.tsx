@@ -1,8 +1,10 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { router, Stack } from 'expo-router';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+
+const API = 'http://10.0.0.136:3000';
 
 const adresses = [
     '1234, rue Doe',
@@ -10,19 +12,28 @@ const adresses = [
     '9999 av. Laval',
 ];
 
-export default function NouvelleAnnonce() {
-    const [titre, setTitre] = useState('');
-    const [description, setDescription] = useState('');
+export default function ModifierAnnonce() {
+    const { id, titre: titreParam, contenu: contenuParam, date_publication, date_expiration, confirmation_reception} = useLocalSearchParams<{
+        id: string;
+        titre: string;
+        contenu: string;
+        date_publication: string;
+        date_expiration: string;
+        confirmation_reception: string;
+    }>();
+
+    const [titre, setTitre] = useState(titreParam || '');
+    const [description, setDescription] = useState(contenuParam || '');
     const [adresse, setAdresse] = useState('');
     const [showAdresses, setShowAdresses] = useState(false);
-    const [confirmation, setConfirmation] = useState(false);
-    const [typeDate, setTypeDate] = useState<'date' | 'periode' | null>(null);
-    const [date, setDate] = useState(new Date());
-    const [heure, setHeure] = useState(new Date());
-    const [heureDebut, setHeureDebut] = useState(new Date());
-    const [heureFin, setHeureFin] = useState(new Date());
-    const [dateDebut, setDateDebut] = useState(new Date());
-    const [dateFin, setDateFin] = useState(new Date());
+    const [confirmation, setConfirmation] = useState(confirmation_reception === 'true');
+    const [typeDate, setTypeDate] = useState<'date' | 'periode'>(date_expiration ? 'periode' : 'date');
+    const [date, setDate] = useState(date_publication ? new Date(date_publication): new Date());
+    const [heure, setHeure] = useState(date_publication ? new Date(date_publication): new Date());
+    const [heureDebut, setHeureDebut] = useState(date_publication ? new Date(date_publication): new Date());
+    const [heureFin, setHeureFin] = useState(date_expiration ? new Date(date_expiration): new Date());
+    const [dateDebut, setDateDebut] = useState(date_publication ? new Date(date_publication): new Date());
+    const [dateFin, setDateFin] = useState(date_expiration ? new Date(date_expiration): new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showHeurePicker, setShowHeurePicker] = useState(false);
     const [showHeureDebutPicker, setShowHeureDebutPicker] = useState(false);
@@ -30,28 +41,26 @@ export default function NouvelleAnnonce() {
     const [showDebutPicker, setShowDebutPicker] = useState(false);
     const [showFinPicker, setShowFinPicker] = useState(false);
 
-    const peutPublier = titre.trim() && description.trim() && adresse;
+    const peutModifier = titre.trim() && description.trim();
 
-    const API = 'http://10.0.0.136:3000';
+    {/*const API = 'http://10.0.0.213:3000';*/}
 
-    const publier = async () => {
+    const modifier = async () => {
     try {
-        const response = await fetch(`${API}/api/annonces`, {
-        method: 'POST',
+        const response = await fetch(`${API}/api/annonces/${id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             titre,
             contenu: description,
-            adresse,
             date_publication: typeDate === 'date' ? date.toISOString() : dateDebut.toISOString(),
             date_expiration: typeDate === 'periode' ? dateFin.toISOString() : null,
             confirmation_reception: confirmation,
-            batiment_id: null,
-            created_by: null,
         })
         });
         const data = await response.json();
-        console.log('Annonce créée:', data);
+        console.log('Annonce modifiée:', data);
+        router.back();
         router.back();
     } catch (err) {
         console.error(err);
@@ -62,7 +71,7 @@ export default function NouvelleAnnonce() {
         <>
             <Stack.Screen options={{
                 headerShown: true,
-                title: "Annonces",
+                title: "Modifier",
                 headerBackVisible:true,
                 headerBackTitle: '',
                 headerStyle: { backgroundColor: '#7C83F5'},
@@ -227,11 +236,11 @@ export default function NouvelleAnnonce() {
                 )}
 
                 <TouchableOpacity
-                    style={[styles.publierBtn, !peutPublier && styles.publierBtnDisabled]}
-                    disabled={!peutPublier}
-                    onPress={publier}
+                    style={[styles.modifierBtn, !peutModifier && styles.modifierBtnDisabled]}
+                    disabled={!peutModifier}
+                    onPress={modifier}
                 >
-                    <Text style={styles.publierBtnText}>Publier</Text>
+                    <Text style={styles.modifierBtnText}>Modifier</Text>
                 </TouchableOpacity>
 
             </ScrollView>
@@ -369,16 +378,16 @@ const styles = StyleSheet.create({
     radioSelected: {
         backgroundColor: '#1e1e2e',
     },
-    publierBtn: {
+    modifierBtn: {
         backgroundColor: '#86efac',
         borderRadius: 16,
         padding: 16,
         alignItems: 'center',
     },
-    publierBtnDisabled: {
+    modifierBtnDisabled: {
         opacity: 0.5,
     },
-    publierBtnText: {
+    modifierBtnText: {
         fontSize: 16,
         fontWeight: '700',
         color: '#1e1e2e',

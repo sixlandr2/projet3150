@@ -1,8 +1,11 @@
+import { useAuth } from "@/context/AuthContext";
 import { router, Stack } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function settings() {
+    const {user, logout} = useAuth();
     const handleLogout = () => {
+        logout();
         router.replace('/(auth)/login');
     };
   
@@ -22,9 +25,9 @@ return (
       <View style={styles.container}>
         <View style={styles.profil}>
             <View style={styles.avatar}>
-                <Text style={styles.avatarText}>L</Text>
+                <Text style={styles.avatarText}>{user?.first_name?.charAt(0).toUpperCase() || '?'}</Text>
             </View>
-            <Text style={styles.username}>Luis A Eche Guzman</Text>
+            <Text style={styles.username}>{user?.first_name} {user?.last_name}</Text>
             {/*<Text style={styles.email}>luis@email.com</Text>*/}
         </View>
 

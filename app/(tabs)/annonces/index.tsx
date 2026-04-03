@@ -1,12 +1,35 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Stack, router } from "expo-router";
+import { Stack, router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const annonces = [
-  { id: 1, titre: "Coupure d'eau", date: '10-02-2026', heure: '15h30-16h30' },
-];
+const API = 'http://10.0.0.136:3000';
+
+type Annonce = {
+  id: number;
+  titre: string;
+  adresse: string;
+  contenu: string;
+  date_publication: string;
+  date_expiration: string | null;
+  batiment_id: number | null;
+  created_by: number | null;
+  confirmation_reception: boolean;
+  created_at: string;
+}
 
 export default function Annonces() {
+  const [annonces, setAnnonces] = useState<Annonce[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetch(`${API}/api/annonces`)
+      .then(res => res.json())
+      .then(data => setAnnonces(data))
+      .catch(err => console.error(err));
+    }, [])
+  );
+
   return (
     <>
       <Stack.Screen options={{
@@ -21,12 +44,27 @@ export default function Annonces() {
 
       <ScrollView style={styles.container}>
         {annonces.map(annonce => (
-          <TouchableOpacity key={annonce.id} style={styles.card}>
+          <TouchableOpacity 
+            key={annonce.id} 
+            style={styles.card}
+            onPress={() => router.push({
+              pathname: '/(tabs)/annonces/detail' as any,
+              params: {
+                id: annonce.id,
+                titre: annonce.titre,
+                adresse: annonce.adresse,
+                contenu: annonce.contenu,
+                date_publication: annonce.date_publication,
+                date_expiration: annonce.date_expiration,
+                batiment_id: annonce.batiment_id,
+              }
+            })}
+            >
             <View style={styles.cardHeader}>
               <Text style={styles.cardTitre}>{annonce.titre}</Text>
-              <Text style={styles.cardDate}>{annonce.date}</Text>
+              <Text style={styles.cardDate}>{new Date(annonce.date_publication).toLocaleDateString('fr-CA')}</Text>
             </View>
-            <Text style={styles.cardHeure}>{annonce.heure}</Text>
+            <Text style={styles.cardHeure}>{annonce.contenu}</Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
