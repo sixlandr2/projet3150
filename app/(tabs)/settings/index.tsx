@@ -37,7 +37,7 @@ return (
  
 
       
-        <TouchableOpacity style={styles.btn}>
+        <TouchableOpacity style={styles.btn} onPress={()=> router.push('/(tabs)/settings/adresses' as any)}>
             <Text style={styles.btnText}>Adresses</Text>
         </TouchableOpacity>
      
