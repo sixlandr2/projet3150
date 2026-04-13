@@ -1,10 +1,10 @@
+import { API } from '@/constants/api';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const API = 'http://10.0.0.136:3000';
 
 const adresses = [
     '1234, rue Doe',

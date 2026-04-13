@@ -1,3 +1,4 @@
+import { API } from '@/constants/api';
 import * as Securestore from 'expo-secure-store';
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -17,7 +18,6 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
-const API = 'http://10.0.0.136:3000';
 
 export function AuthProvider({children}: {children: React.ReactNode}){
     const [user, setUser] = useState<User | null>(null);

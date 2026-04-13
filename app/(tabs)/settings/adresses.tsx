@@ -1,9 +1,9 @@
+import { API } from '@/constants/api';
 import { useAuth } from "@/context/AuthContext";
 import { router, Stack, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const API='http://10.0.0.136:3000';
 
 type Batiment = {
     id: number;

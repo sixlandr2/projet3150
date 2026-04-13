@@ -1,9 +1,9 @@
+import { API } from '@/constants/api';
 import { useAuth } from "@/context/AuthContext";
 import { router, Stack } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 
-const API='http://10.0.0.136:3000';
 
 export default function NouveauBatiment() {
     const {user} = useAuth();

@@ -1,12 +1,10 @@
+import { API } from '@/constants/api';
 import { useAuth } from "@/context/AuthContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Stack, router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const API = 'http://10.0.0.136:3000';
-const {user} = useAuth();
-const estProprietaire = user?.role === 'proprietaire';
 
 type Annonce = {
   id: number;
@@ -22,6 +20,8 @@ type Annonce = {
 }
 
 export default function Annonces() {
+  const {user} = useAuth();
+  const estProprietaire = user?.role === 'proprietaire';
   const [annonces, setAnnonces] = useState<Annonce[]>([]);
 
   useFocusEffect(

@@ -1,3 +1,4 @@
+import { API } from '@/constants/api';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { router, Stack } from 'expo-router';
@@ -32,7 +33,6 @@ export default function NouvelleAnnonce() {
 
     const peutPublier = titre.trim() && description.trim() && adresse;
 
-    const API = 'http://10.0.0.136:3000';
 
     const publier = async () => {
     try {

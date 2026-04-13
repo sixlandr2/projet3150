@@ -1,12 +1,12 @@
+import { API } from '@/constants/api';
 import { useAuth } from "@/context/AuthContext";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const API = 'http://10.0.0.136:3000';
-const {user} = useAuth();
-const estProprietaire = user?.role==='proprietaire';
 
 export default function DetailAnnonce() {
+    const {user} = useAuth();
+    const estProprietaire = user?.role==='proprietaire';
     const { id, titre, contenu, date_publication, date_expiration, batiment_id } = useLocalSearchParams<{
         id: string;
         titre: string;
