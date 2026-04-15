@@ -1,72 +1,87 @@
 import { API } from '@/constants/api';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAuth } from '@/context/AuthContext';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { router, Stack } from 'expo-router';
-import { useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useEffect, useState } from "react";
+import { Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
-const adresses = [
-    '1234, rue Doe',
-    '5678 rue Smith',
-    '9999 av. Laval',
-];
+type Batiment = {
+    id: number;
+    adresse: string;
+};
 
 export default function NouvelleAnnonce() {
+    const {user} = useAuth();
     const [titre, setTitre] = useState('');
     const [description, setDescription] = useState('');
-    const [adresse, setAdresse] = useState('');
-    const [showAdresses, setShowAdresses] = useState(false);
+    const [batiments, setBatiments] = useState<Batiment[]>([]);
+    const [batimentChoisi, setBatimentChoisi] = useState<Batiment | null>(null);
+    const [showBatiments, setShowBatiments] = useState(false);
     const [confirmation, setConfirmation] = useState(false);
-    const [typeDate, setTypeDate] = useState<'date' | 'periode' | null>(null);
-    const [date, setDate] = useState(new Date());
-    const [heure, setHeure] = useState(new Date());
-    const [heureDebut, setHeureDebut] = useState(new Date());
-    const [heureFin, setHeureFin] = useState(new Date());
+    const [typeDate, setTypeDate] = useState<'date' | 'periode'>('date');
     const [dateDebut, setDateDebut] = useState(new Date());
     const [dateFin, setDateFin] = useState(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showHeurePicker, setShowHeurePicker] = useState(false);
-    const [showHeureDebutPicker, setShowHeureDebutPicker] = useState(false);
-    const [showHeureFinPicker, setShowHeureFinPicker] = useState(false);
-    const [showDebutPicker, setShowDebutPicker] = useState(false);
-    const [showFinPicker, setShowFinPicker] = useState(false);
+    const [showPickerDebut, setShowPickerDebut] = useState(false);
+    const [showPickerFin, setShowPickerFin] = useState(false);
+    const [erreur, setErreur] = useState('');
 
-    const peutPublier = titre.trim() && description.trim() && adresse;
+    const peutPublier = titre.trim() && description.trim() && batimentChoisi;
 
-
-    const publier = async () => {
-    try {
-        const response = await fetch(`${API}/api/annonces`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            titre,
-            contenu: description,
-            adresse,
-            date_publication: typeDate === 'date' ? date.toISOString() : dateDebut.toISOString(),
-            date_expiration: typeDate === 'periode' ? dateFin.toISOString() : null,
-            confirmation_reception: confirmation,
-            batiment_id: null,
-            created_by: null,
-        })
-        });
-        const data = await response.json();
-        console.log('Annonce créée:', data);
-        router.back();
-    } catch (err) {
-        console.error(err);
-    }
+    const toLocalISOString = (date: Date) =>{
+        const pad = (n: number) => String(n).padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:00`;
     };
+
+    useEffect(() => {
+        fetch(`${API}/api/batiments?proprietaire_id=${user?.id}`)
+            .then(res=>res.json())
+            .then(data=>setBatiments(data))
+            .catch(err=>console.error(err));
+    }, []);
+
+    const publier = async() =>{
+        try {
+            const response = await fetch(`${API}/api/annonces`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    titre,
+                    contenu: description,
+                    adresse: batimentChoisi?.adresse,
+                    batiment_id: batimentChoisi?.id,
+                    date_publication: toLocalISOString(dateDebut),
+                    date_expiration: typeDate === 'periode'? toLocalISOString(dateFin):null,
+                    confirmation_reception: confirmation,
+                    created_by: user?.id,
+                }),
+            });
+            const data = await response.json();
+            if (data.error) {setErreur(data.error); return;}
+            router.back();
+        } catch(err){
+            setErreur('Erreur de connexion au serveur');
+        }
+    };
+
+    const formaterDate=(date:Date) =>
+        date.toLocaleDateString('fr-CA', {
+            day: '2-digit', month: '2-digit', year: 'numeric', timeZone:'America/Toronto'
+        });
+
+    const formaterHeure=(date:Date) =>
+        date.toLocaleTimeString('fr-CA', {
+            hour: '2-digit', minute: '2-digit', timeZone: 'America/Toronto'
+        });
 
     return (
         <>
             <Stack.Screen options={{
                 headerShown: true,
-                title: "Annonces",
+                title: "Nouvelle annonce",
                 headerBackVisible:true,
                 headerBackTitle: '',
                 headerStyle: { backgroundColor: '#7C83F5'},
-                headerTitleStyle: { fontWeight: 'bold', color: '#1e1e2e', fontSize: 24 },
+                headerTitleStyle: { fontWeight: 'bold', color: '#1e1e2e'},
                 headerShadowVisible: false,
                 headerTintColor: '#1e1e2e',
             }} />
@@ -78,6 +93,8 @@ export default function NouvelleAnnonce() {
                     style={styles.input}
                     value={titre}
                     onChangeText={setTitre}
+                    placeholder='Ex: Inspection annuelle'
+                    placeholderTextColor='#8A8A9A'
                 />
 
                 <Text style={styles.label}>Description</Text>
@@ -85,28 +102,29 @@ export default function NouvelleAnnonce() {
                     style={[styles.input, styles.inputMultiline]}
                     value={description}
                     onChangeText={setDescription}
+                    placeholder="Décrivez l'annonce..."
+                    placeholderTextColor='#8A8A9A'
                     multiline
                     numberOfLines={4}
                 />
 
                 <Text style={styles.label}>Adresse concerné</Text>
                 <TouchableOpacity
-                    style={styles.dropdown}
-                    onPress={() => setShowAdresses(!showAdresses)}
+                    style={styles.input}
+                    onPress={() => setShowBatiments(!showBatiments)}
                 >
-                    <Text style={[styles.dropdownText, !adresse && { color: '#8A8A9A' }]}>{adresse || 'Sélectionner une adresse'}</Text>
-                    <MaterialCommunityIcons name="chevron-down" size={20} color={'#1e1e2e'}/>
+                    <Text style={batimentChoisi?styles.inputText: styles.inputPlaceholder}>{batimentChoisi? batimentChoisi.adresse: 'Sélectionner une adresse'}</Text>
                 </TouchableOpacity>
 
-                {showAdresses && (
-                    <View style={styles.dropdownList}>
-                        {adresses.map((a) => (
+                {showBatiments && (
+                    <View style={styles.dropdown}>
+                        {batiments.map(b => (
                             <TouchableOpacity
-                                key={a}
+                                key={b.id}
                                 style={styles.dropdownItem}
-                                onPress={() => { setAdresse(a); setShowAdresses(false);}}
+                                onPress={() => { setBatimentChoisi(b); setShowBatiments(false);}}
                             >
-                                <Text style={styles.dropdownItemText}>{a}</Text>
+                                <Text style={styles.dropdownText}>{b.adresse}</Text>
                             </TouchableOpacity>
                         ))}
                     </View>
@@ -117,114 +135,76 @@ export default function NouvelleAnnonce() {
                     onPress={() => setConfirmation(!confirmation)}
                 >
                     <View style={[styles.checkbox, confirmation && styles.checkboxChecked]}>
-                        {confirmation && <MaterialCommunityIcons name="check" size={14} color='#fff' />}
+                        {confirmation && <Text style={styles.checkmark}>✓</Text>}
                     </View>
                     <Text style={styles.checkboxLabel}>Confirmation de réception</Text>
                 </TouchableOpacity>
 
-                <View style={styles.radioRow}>
+                <View style={styles.toggleRow}>
                     <TouchableOpacity
-                        style={styles.radioOption}
+                        style={styles.toggleOption}
                         onPress={() => setTypeDate('date')}
                     >
-                        <View style={[styles.radio, typeDate === 'date' && styles.radioSelected]}/>
-                        <Text style={styles.radioLabel}>Date</Text>
+                        <View style={styles.radioOuter}>
+                            {typeDate==='date' && <View style={styles.radioInner}/>}
+                        </View>
+                        <Text style={styles.toggleText}>Date</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={styles.radioOption}
+                        style={styles.toggleOption}
                         onPress={() => setTypeDate('periode')}
                     >
-                        <View style={[styles.radio, typeDate === 'periode' && styles.radioSelected]}/>
-                        <Text style={styles.radioLabel}>Période</Text>
+                        <View style={styles.radioOuter}>
+                            {typeDate==='periode' && <View style={styles.radioInner}/>}
+                        </View>
+                        <Text style={styles.toggleText}>Période</Text>
                     </TouchableOpacity>
                 </View>
 
-                {typeDate === 'date' && (
-                    <View style={styles.dateContainer}>
-                        <TouchableOpacity style={styles.dateBtn} onPress={() => setShowDatePicker(true)}>
-                            <Text style={styles.dateBtnText}>{date.toLocaleDateString('fr-CA')}</Text>
+                <View style={styles.dateRow}>
+                    <View style={styles.dateCol}>
+                        <Text style={styles.dateLabel}>{typeDate==='periode'?'Début':'Date'}</Text>
+                        <TouchableOpacity onPress={()=>setShowPickerDebut(!showPickerDebut)}>
+                            <Text style={styles.dateValue}>{formaterDate(dateDebut)}</Text>
+                            <Text style={styles.dateValue}>{formaterHeure(dateDebut)}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.dateBtn} onPress={() => setShowHeurePicker(true)}>
-                            <Text style={styles.dateBtnText}>{heure.toLocaleTimeString('fr-CA', {hour: '2-digit', minute: '2-digit'})}</Text>
-                        </TouchableOpacity>
-                        {showDatePicker && (
-                            <DateTimePicker
-                                value={date}
-                                mode='date'
-                                display='default'
-                                locale='fr-CA'
-                                onChange={(_, d) => {setShowDatePicker(false); if (d) setDate(d); }}
-                            />
-                        )}
-                        {showHeurePicker && (
-                            <DateTimePicker
-                                value={heure}
-                                mode='time'
-                                display='default'
-                                locale='fr-CA'
-                                onChange={(_, h) => {setShowHeurePicker(false); if (h) setHeure(h); }}
-                            />
-                        )}
                     </View>
+
+                    {typeDate==='periode' && (
+                        <View style={styles.dateCol}>
+                            <Text style={styles.dateLabel}>Fin</Text>
+                            <TouchableOpacity onPress={()=>setShowPickerFin(!showPickerFin)}>
+                                <Text style={styles.dateValue}>{formaterDate(dateFin)}</Text>
+                                <Text style={styles.dateValue}>{formaterHeure(dateFin)}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    )}
+                </View>
+
+                {showPickerDebut && (
+                    <DateTimePicker
+                        value={dateDebut}
+                        mode='datetime'
+                        display={Platform.OS==='ios'?"spinner":'default'}
+                        onChange={(event, date) => {
+                            if (date) setDateDebut(date);}}
+                        locale="fr-CA"
+                    />
+                )}
+                {showPickerFin && typeDate === 'periode' && (
+                    <DateTimePicker
+                        value={dateFin}
+                        mode='datetime'
+                        display={Platform.OS==='ios'?"spinner":'default'}
+                        onChange={(event, date) => {
+                            if (date) setDateFin(date);}}
+                        locale="fr-CA"
+                        minimumDate={dateDebut}
+                    />
                 )}
 
-                {typeDate === 'periode' && (
-                    <View style={styles.dateContainer}>
-                        <Text style={styles.periodeLabel}>Début</Text>
-                        <TouchableOpacity style={styles.dateBtn} onPress={() => setShowDebutPicker(true)}>
-                            <Text style={styles.dateBtnText}>{dateDebut.toLocaleDateString('fr-CA')}</Text>
-                        </TouchableOpacity>
-                        {showDebutPicker && (
-                            <DateTimePicker
-                                value={dateDebut}
-                                mode='date'
-                                display='default'
-                                locale='fr-CA'
-                                onChange={(_, d) => {setShowDebutPicker(false); if (d) setDateDebut(d); }}
-                            />
-                        )}
-                        <TouchableOpacity style={styles.dateBtn} onPress={() => setShowHeureDebutPicker(true)}>
-                            <Text style={styles.dateBtnText}>{heureDebut.toLocaleTimeString('fr-CA', {hour: '2-digit', minute: '2-digit'})}</Text>
-                        </TouchableOpacity>
-                        {showHeureDebutPicker && (
-                            <DateTimePicker
-                                value={heureDebut}
-                                mode='time'
-                                display='default'
-                                locale='fr-CA'
-                                onChange={(_, h) => {setShowHeureDebutPicker(false); if (h) setHeureDebut(h); }}
-                            />
-                        )}
-
-
-                        <Text style={styles.periodeLabel}>Fin</Text>
-                        <TouchableOpacity style={styles.dateBtn} onPress={() => setShowFinPicker(true)}>
-                            <Text style={styles.dateBtnText}>{dateFin.toLocaleDateString('fr-CA')}</Text>
-                        </TouchableOpacity>
-                        {showFinPicker && (
-                            <DateTimePicker
-                                value={dateFin}
-                                mode='date'
-                                display='default'
-                                locale='fr-CA'
-                                onChange={(_, d) => {setShowFinPicker(false); if (d) setDateFin(d); }}
-                            />
-                        )}
-                        <TouchableOpacity style={styles.dateBtn} onPress={() => setShowHeureFinPicker(true)}>
-                            <Text style={styles.dateBtnText}>{heureFin.toLocaleTimeString('fr-CA', {hour: '2-digit', minute: '2-digit'})}</Text>
-                        </TouchableOpacity>
-                        {showHeureFinPicker && (
-                            <DateTimePicker
-                                value={heureFin}
-                                mode='time'
-                                display='default'
-                                locale='fr-CA'
-                                onChange={(_, h) => {setShowHeureFinPicker(false); if (h) setHeureFin(h); }}
-                            />
-                        )}
-                    </View>
-                )}
+                {erreur ? <Text style={styles.erreur}>{erreur}</Text>: null}
 
                 <TouchableOpacity
                     style={[styles.publierBtn, !peutPublier && styles.publierBtnDisabled]}
@@ -244,143 +224,144 @@ export default function NouvelleAnnonce() {
 const styles = StyleSheet.create({
     container : { 
         flex: 1,
-        backgroundColor: '#f0f4ff',
-    },
-    dateContainer: {
-        gap: 8,
-        marginBottom: 24,
-    },
-    dateBtn: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#1e1e2e',
-        padding: 12,
-    },
-    dateBtnText: {
-        fontSize: 15,
-        color: '#1e1e2e',
-    },
-    periodeLabel: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#8A8A9A',
+        backgroundColor: '#1e1e2e',
     },
     content: {
-        padding: 24,
-        gap: 8,
+        padding: 20,
+        paddingBottom: 40,
     },
     label: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#1e1e2e',
-        marginBottom: 4,
+        color: '#ffffff',
+        marginBottom: 6,
+        marginTop: 14,
     },
     input: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#1e1e2e',
-        padding: 12,
+        backgroundColor: '#2a2a3e',
+        borderRadius: 10,
+        padding: 14,
         fontSize: 15,
-        color: '#1e1e2e',
-        marginBottom: 16,
+        color: '#ffffff',
     },
     inputMultiline: {
         height: 100,
         textAlignVertical: 'top',
     },
-    dropdown: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#1e1e2e',
-        padding: 12,
+    inputText:{
+        color: '#ffffff',
+        fontSize: 15
+    },
+    inputPlaceholder: {
+        color: '#8A8A9A',
+        fontSize: 15,
+    },
+    checkmark: {
+        color: '#fff',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    toggleRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        gap: 24,
+        marginTop: 18,
+        marginBottom: 12,
+    },
+    toggleOption:{
+        flexDirection: 'row',
         alignItems: 'center',
+        gap: 8,
+    },
+    radioOuter: {
+        width: 18,
+        height: 18,
+        borderRadius: 9,
+        borderWidth: 2,
+        borderColor: '#7C83F5',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    radioInner: {
+        width: 9,
+        height: 9,
+        borderRadius: 5,
+        backgroundColor: '#7C83F5',
+    },
+    toggleText: {
+        color: '#ffffff',
+        fontSize: 15,
+    },
+    erreur: {
+        color: '#ff6b6b',
+        marginTop: 10,
+    },
+    dateRow:{
+        flexDirection:'row',
+        gap: 24,
+        marginBottom: 12,
+    },
+    dateCol:{
+        flex: 1,
+    },
+    dateLabel: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 14,
         marginBottom: 4,
+    },
+    dateValue: {
+        color: '#7C83F5',
+        fontSize: 15,
+    },
+    dropdown: {
+        backgroundColor: '#2a2a3e',
+        borderRadius: 10,
+        marginTop:4,
     },
     dropdownText: {
         fontSize: 15,
-        color: '#1e1e2e',
-    },
-    dropdownList: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#1e1e2e',
-        marginBottom: 16,
-        overflow: 'hidden',
+        color: '#ffffff',
     },
     dropdownItem: {
-        padding: 12,
+        padding: 14,
         borderBottomWidth: 1,
-        borderBottomColor: '#f0f4ff',
-    },
-    dropdownItemText: {
-        fontSize: 15,
-        color: '#1e1e2e',
+        borderBottomColor: '#3a3a4e',
     },
     checkboxRow: {
         flexDirection: 'row',
         alignItems: 'center',
         gap: 10,
-        marginBottom: 16,
-        marginTop: 8,
+        marginTop: 16,
     },
     checkbox: {
         width: 20,
         height: 20,
         borderRadius: 4,
         borderWidth: 2,
-        borderColor: '#1e1e2e',
+        borderColor: '#7C83F5',
         justifyContent: 'center',
         alignItems: 'center',
     },
     checkboxChecked: {
-        backgroundColor: '#1e1e2e',
+        backgroundColor: '#7C83F5',
     },
     checkboxLabel: {
         fontSize: 15,
-        color: '#1e1e2e',
-    },
-    radioOption: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    radioLabel: {
-        fontSize: 15,
-        color: '#1e1e2e',
-    },
-    radioRow: {
-        flexDirection: 'row',
-        gap: 32,
-        marginBottom: 32,
-    },
-    radio: {
-        width: 20,
-        height: 20,
-        borderRadius: 10,
-        borderWidth: 2,
-        borderColor: '#1e1e2e',
-    },
-    radioSelected: {
-        backgroundColor: '#1e1e2e',
+        color: '#ffffff',
     },
     publierBtn: {
-        backgroundColor: '#86efac',
+        backgroundColor: '#7C83F5',
         borderRadius: 16,
         padding: 16,
         alignItems: 'center',
+        marginTop: 24,
     },
     publierBtnDisabled: {
-        opacity: 0.5,
+        backgroundColor: '#3a3a4e',
     },
     publierBtnText: {
         fontSize: 16,
-        fontWeight: '700',
-        color: '#1e1e2e',
+        fontWeight: 'bold',
+        color: '#ffffff',
     },
 });

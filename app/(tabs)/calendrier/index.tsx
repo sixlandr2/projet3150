@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router, Stack, useFocusEffect } from "expo-router";
 import { useCallback, useRef, useState } from "react";
-import { Alert, Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Calendar } from "react-native-big-calendar";
 import { Calendar as MiniCalendar } from "react-native-calendars";
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -247,29 +247,6 @@ export default function Calendrier() {
                 }}
               >
                 <Text style={styles.modifierBtnText}>Modifier</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.supprimerBtn}
-                onPressIn={()=> {
-                  Alert.alert(
-                    'Supprimer ce travail',
-                    'Êtes-vous sûr ? Cette action est irréversible.',
-                    [
-                      {text: 'Annuler', style:'cancel'},
-                      {
-                        text: 'Supprimer',
-                        style: 'destructive',
-                        onPress: async ()=> {
-                          await fetch (`${API}/api/travaux/${travailChoisi?.id}`, {method: 'DELETE'});
-                          setShowDetail(false);
-                          setEvents(prev=>prev.filter((e:any) => e.id !==travailChoisi?.id));
-                        }
-                      }
-                    ]
-                  );
-                }}
-              >
-                <Text style={styles.supprimerBtnText}>Supprimer</Text>
               </TouchableOpacity>
             </View>
           </View>

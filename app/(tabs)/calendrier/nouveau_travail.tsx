@@ -3,7 +3,7 @@ import { useAuth } from "@/context/AuthContext";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 type Batiment = {
     id: number;
@@ -227,6 +227,30 @@ export default function NouveauTravail() {
                 >
                     <Text style={styles.publierBtnText}>{modeEdition?'Modifier': 'Publier'}</Text>
                 </TouchableOpacity>
+                {modeEdition && (
+                    <TouchableOpacity
+                        style={styles.supprimerBtn}
+                        onPress={()=> {
+                            Alert.alert(
+                                'Supprimer ce travail',
+                                'Êtes-vous sûr ? Cette action est irréversible.',
+                                [
+                                    {text: 'Annuler', style:'cancel'},
+                                    {
+                                        text:'Supprimer',
+                                        style:'destructive',
+                                        onPress:async()=> {
+                                            await fetch(`${API}/api/travaux/${params.id}`, {method: 'DELETE'});
+                                            router.back();
+                                        }
+                                    }
+                                ]
+                            );
+                        }}
+                    >
+                        <Text style={styles.supprimerBtnText}>Supprimer ce travail</Text>
+                    </TouchableOpacity>
+                )}
             </ScrollView>
         </>
     );
@@ -355,5 +379,17 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    supprimerBtn: {
+        backgroundColor: '#ff6b6b',
+        borderRadius: 10,
+        padding: 16,
+        alignItems: 'center',
+        marginTop: 12,
+    },
+    supprimerBtnText: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 15,
     },
 });

@@ -79,11 +79,11 @@ export default function Messages() {
               <View style={styles.statutBadge}>
                 <View style={[
                   styles.statutDot,
-                  { backgroundColor: item.statut === 'Ouvert' ? '#22c55e' : '#8A8A9A' }
+                  { backgroundColor: item.statut === 'Ouvert' ? '#a8f0c6' : '#8A8A9A' }
                 ]}/>
                 <Text style={[
                   styles.statutText,
-                  { color: item.statut === 'Ouvert' ? '#22c55e' : '#8A8A9A' }
+                  { color: item.statut === 'Ouvert' ? '#a8f0c6' : '#8A8A9A' }
                 ]}>
                   {item.statut}
                 </Text>

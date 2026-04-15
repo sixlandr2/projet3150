@@ -7,13 +7,14 @@ import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "rea
 export default function DetailAnnonce() {
     const {user} = useAuth();
     const estProprietaire = user?.role==='proprietaire';
-    const { id, titre, contenu, date_publication, date_expiration, batiment_id } = useLocalSearchParams<{
+    const { id, titre, contenu, date_publication, date_expiration, batiment_id, adresse } = useLocalSearchParams<{
         id: string;
         titre: string;
         contenu: string;
         date_publication: string;
         date_expiration: string;
         batiment_id: string;
+        adresse: string;
     }>();
 
     const supprimer = () => {
@@ -37,14 +38,14 @@ export default function DetailAnnonce() {
     const formatDate = (dateStr: string) => {
         if (!dateStr) return '-';
         return new Date(dateStr).toLocaleDateString('fr-CA', {
-            year: 'numeric', month: '2-digit', day: '2-digit'
+            year: 'numeric', month: '2-digit', day: '2-digit', timeZone: 'America/Toronto'
         });
     };
 
     const formatHeure = (dateStr: string) => {
         if (!dateStr) return '-';
         return new Date(dateStr).toLocaleTimeString('fr-CA', {
-            hour: '2-digit', minute: '2-digit'
+            hour: '2-digit', minute: '2-digit', timeZone: 'America/Toronto'
         });
     };
 
@@ -56,7 +57,7 @@ export default function DetailAnnonce() {
                 headerBackVisible: true,
                 headerBackTitle: '',
                 headerStyle: { backgroundColor: '#7C83F5' },
-                headerTitleStyle: {fontWeight: 'bold', color: '#1e1e2e', fontSize:24 },
+                headerTitleStyle: {fontWeight: 'bold', color: '#1e1e2e'},
                 headerShadowVisible: false,
                 headerTintColor: '#1e1e2e',
             }}/>
@@ -74,45 +75,51 @@ export default function DetailAnnonce() {
 
                 <Text style={styles.label}>Adresse concerné</Text>
                 <View style={styles.champ}>
-                    <Text style={styles.champText}>{batiment_id || '-'}</Text>
+                    <Text style={styles.champText}>{adresse || '-'}</Text>
                 </View>
 
                 <Text style={styles.label}>{date_expiration ? 'Période' : 'Date'}</Text>
-                <Text style={styles.dateText}>{formatDate(date_publication)}</Text>
-                <Text style={styles.dateText}>{formatHeure(date_publication)}</Text>
-
-                {date_expiration && (
-                    <>
-                        <Text style={styles.dateText}>→ {formatDate(date_expiration)}</Text>
-                        <Text style={styles.dateText}>{formatHeure(date_expiration)}</Text>
-                    </>
-                )}
-
-                <View style={styles.btns}>
-                    {estProprietaire &&(
-                        <TouchableOpacity 
-                        style={styles.modifierBtn}
-                        onPress={() => router.push({
-                            pathname: '/(tabs)/annonces/modifier' as any,
-                            params: {
-                                id,
-                                titre,
-                                contenu,
-                                date_publication,
-                                date_expiration,
-                                /*confirmation_reception,*/
-                            }
-                        })}
-                        >
-                        <Text style={styles.modifierBtnText}>Modifier</Text>
-                    </TouchableOpacity>
-                    )}
-                    {estProprietaire &&(
-                    <TouchableOpacity style={styles.supprimerBtn} onPress={supprimer}>
-                        <Text style={styles.supprimerBtnText}>Supprimer</Text>
-                    </TouchableOpacity>
+                <View style={styles.dateRow}>
+                    <View style={styles.dateCol}>
+                        <Text style={styles.dateLabel}>{date_expiration?'Début':'Date'}</Text>
+                        <Text style={styles.dateValue}>{formatDate(date_publication)}</Text>
+                        <Text style={styles.dateValue}>{formatHeure(date_publication)}</Text>
+                    </View>
+                     {date_expiration && (
+                        <View style={styles.dateCol}>
+                            <Text style={styles.dateLabel}>Fin</Text>
+                            <Text style={styles.dateValue}>→ {formatDate(date_expiration)}</Text>
+                            <Text style={styles.dateValue}>{formatHeure(date_expiration)}</Text>
+                        </View>
                     )}
                 </View>
+
+                {estProprietaire &&(
+                    <View style={styles.btns}>
+                        <TouchableOpacity 
+                            style={styles.modifierBtn}
+                            onPress={() => router.push({
+                                pathname: '/(tabs)/annonces/modifier' as any,
+                                params: {
+                                    id,
+                                    titre,
+                                    contenu,
+                                    date_publication,
+                                    date_expiration,
+                                    batiment_id,
+                                    adresse,
+                                }
+                            })}
+                        >
+                            <Text style={styles.modifierBtnText}>Modifier</Text>
+                        </TouchableOpacity>
+                    
+                        <TouchableOpacity style={styles.supprimerBtn} onPress={supprimer}>
+                            <Text style={styles.supprimerBtnText}>Supprimer</Text>
+                        </TouchableOpacity>
+                    
+                    </View>
+                )}
             </ScrollView>
         </>
     );
@@ -121,31 +128,48 @@ export default function DetailAnnonce() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f0f4ff',
+        backgroundColor: '#1e1e2e',
     },
     content: {
-        padding: 24,
-        gap: 8,
+        padding: 20,
+        paddingBottom: 40,
     },
-    label: {
-        fontSize: 20,
-        fontWeight: '600',
-        color: '#1e1e2e',
+    dateRow: {
+        flexDirection: 'row',
+        gap: 24,
         marginTop: 8,
     },
+    dateCol: {
+        flex: 1,
+    },
+    dateLabel: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 14,
+        marginBottom: 4,
+    },
+    dateValue: {
+        color: '#7C83F5',
+        fontSize: 15,
+    },
+    label: {
+        fontSize: 15,
+        fontWeight: '600',
+        color: '#ffffff',
+        marginTop: 14,
+        marginBottom: 6,
+    },
     champ: {
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        borderWidth: 1,
-        borderColor: '#d1d5db',
-        padding: 12,
+        backgroundColor: '#2a2a3e',
+        borderRadius: 10,
+        padding: 14,
     },
     champMultiline: {
         minHeight: 100,
     },
     champText: {
         fontSize: 15,
-        color: '#1e1e2e',
+        color: '#ffffff',
     },
     dateText: {
         fontSize: 16,
@@ -156,25 +180,25 @@ const styles = StyleSheet.create({
         marginTop: 24,
     },
     modifierBtn: {
-        backgroundColor: '#86efac',
-        borderRadius: 16,
+        backgroundColor: '#F5C542',
+        borderRadius: 10,
         padding: 16,
         alignItems: 'center',
     },
     modifierBtnText: {
         fontSize: 16,
-        fontWeight: '700',
+        fontWeight: 'bold',
         color: '#1e1e2e',
     },
     supprimerBtn: {
-        backgroundColor: '#f16363',
-        borderRadius: 16,
+        backgroundColor: '#ff6b6b',
+        borderRadius: 10,
         padding: 16,
         alignItems: 'center',
     },
     supprimerBtnText: {
         fontSize: 16,
-        fontWeight: '700',
+        fontWeight: 'bold',
         color: '#fff',
     },
 });
