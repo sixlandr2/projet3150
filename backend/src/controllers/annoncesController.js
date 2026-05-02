@@ -1,8 +1,17 @@
 import { pool } from '../db.js';
 
 export const getAnnonces = async (req, res) => {
+    const {proprietaire_id} = req.query;
     try {
-        const result = await pool.query('SELECT * FROM annonces ORDER BY created_at DESC');
+        const result = await pool.query(
+            `SELECT
+                annonces.*
+            FROM annonces
+            JOIN batiments ON batiments.id = annonces.batiment_id
+            WHERE batiments.proprietaire_id = $1
+            ORDER BY annonces.created_at DESC`,
+            [proprietaire_id]
+        );
         res.json(result.rows);
     } catch (err) {
         res.status(500).json({ error: err.message });

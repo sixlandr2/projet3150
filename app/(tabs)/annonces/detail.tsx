@@ -160,16 +160,17 @@ const styles = StyleSheet.create({
         marginBottom: 6,
     },
     champ: {
-        backgroundColor: '#2a2a3e',
-        borderRadius: 10,
-        padding: 14,
+        borderBottomColor: '#3a3a4e',
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        marginBottom: 8,
     },
     champMultiline: {
         minHeight: 100,
     },
     champText: {
         fontSize: 15,
-        color: '#ffffff',
+        color: '#cccccc',
     },
     dateText: {
         fontSize: 16,

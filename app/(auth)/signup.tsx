@@ -31,9 +31,16 @@ export default function Signup() {
                 <Stack.Screen options={{
                     headerShown: true,
                     title: "App",
+                    headerBackTitle: '',
+                    headerBackVisible: false,
                     headerStyle: { backgroundColor: '#7C83F5'},
                     headerTitleStyle: {fontWeight: 'bold', fontSize: 24},
                     headerShadowVisible: false,
+                    headerLeft: () =>(
+                        <TouchableOpacity onPress={() => router.back()}>
+                            <MaterialCommunityIcons name="arrow-left" size={24} color={'#1e1e2e'}/>
+                        </TouchableOpacity>
+                    )
                 }}/>
                 <View style={styles.roleContainer}>
                     <Text style={styles.roleTitle}>Je suis</Text>
@@ -53,8 +60,8 @@ export default function Signup() {
          <Stack.Screen options={{
             headerShown: true,
             title: "App",
+            headerBackVisible:false,
             headerBackTitle: '',
-            headerBackVisible:true,
             headerTintColor: '#1e1e2e',
             headerStyle: { backgroundColor: '#7C83F5'},
             headerTitleStyle: {fontWeight: 'bold', fontSize: 24},

@@ -26,7 +26,7 @@ export default function Annonces() {
 
   useFocusEffect(
     useCallback(() => {
-      fetch(`${API}/api/annonces`)
+      fetch(`${API}/api/annonces?proprietaire_id=${user?.id}`)
       .then(res => res.json())
       .then(data => setAnnonces(data))
       .catch(err => console.error(err));

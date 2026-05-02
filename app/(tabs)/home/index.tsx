@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
       alignItems: 'flex-end',
     },
     travailDate: {
-      color: 'fff',
+      color: '#fff',
       fontWeight: 'bold',
       marginBottom: 4,
       fontSize: 16,

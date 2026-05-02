@@ -43,7 +43,7 @@ return (
      
         <View style={styles.separateur}/>
      
-        <TouchableOpacity style={[styles.btn, { marginTop: 'auto'}]}>
+        <TouchableOpacity style={[styles.btnMotDePasse, { marginTop: 'auto'}]}>
             <Text style={styles.btnText}>Changer mot de passe</Text>
         </TouchableOpacity>
      
@@ -72,6 +72,13 @@ const styles = StyleSheet.create({
     btn: {
         width: '100%',
         backgroundColor: '#6366f1',
+        borderRadius: 12,
+        padding: 16,
+        alignItems: 'center',
+    },
+    btnMotDePasse: {
+        width: '100%',
+        backgroundColor: '#000000',
         borderRadius: 12,
         padding: 16,
         alignItems: 'center',
